@@ -1,8 +1,8 @@
 dna_seq = 'CATGTAGACTAG'
 
-lenght_dna = len(dna_seq)
+length_dna = len(dna_seq)
 
-print(lenght_dna)
+print(length_dna)
 
 count_a = dna_seq.count('A')
 count_c = dna_seq.count('C')
