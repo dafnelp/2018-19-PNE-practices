@@ -15,3 +15,5 @@ with open('CPLX2.txt', 'r') as f:
     print('C:', count_c)
     print('T:', count_t)
     print('G:', count_g)
+
+    f.close()
