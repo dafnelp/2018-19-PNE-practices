@@ -1,6 +1,6 @@
-with open('CPLX2.txt', 'r') as f:
+with open('CPLX2.txt', 'r') as file:
 
-    DNA_seq = f.read()
+    DNA_seq = file.read()
 
     while '>' in DNA_seq:
         replace_line = DNA_seq.find('\n')
@@ -16,4 +16,4 @@ with open('CPLX2.txt', 'r') as f:
     print('T:', count_t)
     print('G:', count_g)
 
-    f.close()
+    file.close()
