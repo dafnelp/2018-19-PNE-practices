@@ -17,12 +17,15 @@ def count_bases(seq):
 
     tl = len(seq)
 
-    perc_a = ('A percentage:', round(100.0 * value_a / tl, 1))
-    perc_c = ('C percentage:', round(100.0 * value_c / tl, 1))
-    perc_t = ('T percentage:', round(100.0 * value_t / tl, 1))
-    perc_g = ('G percentage:', round(100.0 * value_g / tl, 1))
+    if tl > 0:
+        perc_a = {'A percentage': round(100.0 * value_a / tl, 1)}
+        perc_c = {'C percentage': round(100.0 * value_c / tl, 1)}
+        perc_t = {'T percentage': round(100.0 * value_t / tl, 1)}
+        perc_g = {'G percentage': round(100.0 * value_g / tl, 1)}
 
-    length_seq = ('The length of the sequence is:', tl)
+    else:
+        return 0
+    length_seq = {'The length of the sequence is': tl}
 
     # Return the result
 
