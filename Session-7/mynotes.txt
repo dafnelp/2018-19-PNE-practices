@@ -1,0 +1,39 @@
+CLIENT-SERVER MODEL
+
+Client -- start the comunication and make a request to the srver
+Server -- make the response for the client
+
+There can be many clients
+
+If the client doesn´t exists, nothing happens BUT if there is no server, the client doesn´t receive a response (nothing works)
+
+The client and the server are running in a computer but there can be more programs inside the computer. The client and the server can
+be running inside theh same computer.
+The client and the server are comunicated through internet. Inside internet there are isolated computers connected in networks. With the IP
+addres computers are connected and identified. the computer can have several ones. (IP---Addres than can change depending where are you connected)
+
+- My phone ID addres at URJC is: 10.0.54.95
+- ID of the computer: 212.128.253.78
+- ID of the teacher: 212.128.253.64
+
+Ping for know if the computer 'is alive'. We send messages to the computer.
+EX
+---- ping time to 8.8.8.8:
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=121 time=3.21 ms
+
+---- ping time of my computer:
+64 bytes from 212.128.253.78: icmp_seq=1 ttl=64 time=0.065 ms
+
+---- ping of other computer:
+64 bytes from 212.128.253.77: icmp_seq=1 ttl=64 time=0.600 ms
+
+---- ping time of my mobile:
+64 bytes from 10.0.54.95: icmp_seq=1 ttl=62 time=14.5 ms
+
+URL -- identifying a computer interface for humans
+There are special servers (DNS) that make a transformation between the URL and the IP adres
+EX. the IP addres of wwww.google.com is: 216.58.214.164
+    ping of www.URJC.es is: 212.128.240.50
+
+The port is a number that identify any available app (there is a lot of apps in the same computer) that can communicate to the server. The web server usually is the 80
+TO CONNECT THE SERVER WE NEED THE ID ADDRES AND THE PORT
