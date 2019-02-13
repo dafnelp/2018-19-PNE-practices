@@ -28,7 +28,7 @@ class Seq:
         return ''. join(r_seq)
 
 
-# Connect to the server using a while loop for asking to different sequences
+# Connect to the server using a while loop for asking for different sequences
 
 s_msg = True
 
@@ -37,8 +37,8 @@ while True:
 
     print("Socket created")
 
-    PORT = 8083
-    IP = "212.128.253.75"
+    PORT = 8082
+    IP = "212.128.253.64"
 
     s.connect((IP, PORT))
 
@@ -46,9 +46,9 @@ while True:
     str_msg = Seq(str_msg)
 
     seq_comp = str_msg.complement()
-    seq_rev = str_msg.reverse()
+    seq_comp = Seq(seq_comp)
+    seq_rev = seq_comp.reverse()
 
-    s.send(str.encode(seq_comp))
     s.send(str.encode(seq_rev))
 
     msg = s.recv(2048).decode("utf-8")
