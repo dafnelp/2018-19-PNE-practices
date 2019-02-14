@@ -11,7 +11,7 @@ IP = "10.0.2.15"
 
 s.connect((IP, PORT))
 
-s.send(str.encode("Hello, I'm testing the client-server in my computer"))
+s.send(str.encode("Hello, I'm testing the client-server in my own computer"))
 
 msg = s.recv(2048).decode("utf-8")
 print("MESSAGE FROM THE SERVER:")
