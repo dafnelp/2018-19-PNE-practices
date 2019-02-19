@@ -1,23 +1,22 @@
 import socket
-
+import sys
 from termcolor import colored
 
-PORT = 8080
-IP = "212.128.253.95"
+PORT = 8082
+IP = "10.0.2.15"
 MAX_OPEN_REQUEST = 5
 
 
 def process_client(cs):
-    # Max length of the message and decode the message from bytes to strings
     # Reading the message from the client
     msg = cs.recv(2048).decode("utf-8")
+    msg = msg.lower()
+
     if msg == "exit":
-
-        print("Message from the client: {}".format(msg))
-        cs.send(str.encode('Program terminate'))
-
+        cs.send(str.encode("Program terminate"))
 
         cs.close()
+        sys.exit(0)
 
     else:
         msg = colored(msg, 'blue')
@@ -42,6 +41,7 @@ print("Socket ready: {}".format(serversocket))
 while True:
 
     print("Waiting for connections at: {}, {}".format(IP, PORT))
+
     (clientsocket, address) = serversocket.accept()
 
     # Process the client request
