@@ -60,31 +60,68 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(str.encode(content))
 
             return
-        if "/" or "/echo" in self.requestline:
+
+        # Open the main page
+        if "/ HTTP/1.1" in self.requestline:
             process_info("Exercise-1.html")
 
+        # Open the page with the message introduced by the client
+        elif "/echo" in self.path:
+            msg = self.requestline.split()
+            # Position in the request line that correspond to the echo message
+            position = msg[1]
+            # Way to have the message of the client
+            msg_cl = position.find("msg=")
+            # ---- MESSAGE OF THE CLIENT ----
+            echo_msg = position[msg_cl + 4:]
+
+            # Creating the html
+            contents = """
+                <!DOCTYPE html>
+                <html lang="en" dir="ltr">
+                  <head>
+                    <meta charset="utf-8">
+                    <title>Echo of the received message</title>
+                  </head>
+                  <body style="background-color: white;">
+                    <h1>Echo of the received message</h1>
+                     <br>""" + echo_msg + """ <br><br>
+                    <a href="10.0.2.15:8000/">Link to main server</a>
+                  </body>
+                </html>
+                """
+
+            # Everything is OK
+            status_line = "HTTP/1.1 200 OK\r\n"
+
+            # Build the header
+            header = "Content-Type: text/html\r\n"
+            header += "Content-Length: {}\r\n".format(len(str.encode(contents)))
+
+            # Build the message by joining together all the parts
+            response_msg = str.encode(status_line + header + "\r\n" + contents)
+
+            # Send the echo message
+            self.wfile.write(response_msg)
+
+        # Error page
         else:
             process_error("error.html")
 
-        print(self.requestline.split())
-        #def echo_response(rs):
-            #self.requestline.split()
-
-
 
 # MAIN PROGRAM
-
 
 with socketserver.TCPServer(("", PORT), TestHandler) as httpd:
     print("Serving at PORT", PORT)
 
     # -- Main loop: Attend the client. Whenever there is a new
-    # -- clint, the handler is called
+    # -- client, the handler is called
     try:
         httpd.serve_forever()
+
     except KeyboardInterrupt:
         print("")
-        print("Stoped by the user")
+        print("Stopped by the user")
         httpd.server_close()
 
 print("")
