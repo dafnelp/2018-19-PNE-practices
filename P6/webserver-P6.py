@@ -5,7 +5,7 @@ import termcolor
 from Seq import Seq
 
 # Define the port
-PORT = 8001
+PORT = 8000
 
 
 # Class with our handler
@@ -63,68 +63,105 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             return
 
-        # Open the main page
-        if "/ HTTP/1.1" in self.requestline:
-            process_info("index.html")
+        def valid_seq(seq_msg):
+            """Function to know if the characters introduced by the
+            client are a sequence of DNA.
+            Parameters: seq_msg that corresponds to the message introduced
+            by the client"""
 
-        # Open the page with the message introduced by the client
-        elif "/seq" in self.path:
+            for letter in seq_msg:
+                # Way that allow to recognize upper and lower introduced characters
+                letter = letter.upper()
+                if letter != 'A' and letter != 'C' and letter != 'G' and letter != 'T':
+                    # Open the error HTML file
+                    process_error("error.html")
+                    return False
+            return True
+
+        def chk_len(seq_dna):
+            """Function that gives the length of the sequence if the
+            client have selected the check button.
+            Parameters: seq_dna --- seq_msg already converted into the
+            Class Seq"""
+
+            if "chk" in self.path:
+                len_seq = "Total length of the sequence: {}".format(seq_dna.len())
+                return len_seq
+            return "Check button have not been selected"
+
+        def treat(seq_dna, operation, base):
+            """Function that performs the count or the percentage of the bases.
+            Parameters: seq_dna --- seq_msg already converted into the
+            Class Seq, operation --- count or percentage, base --- type of base of DNA"""
+
+            if operation == "count":
+                counter_bases = "Number of bases: {}".format(seq_dna.count_bases())
+                return counter_bases
+
+            elif operation == "perc":
+                return seq_dna.perc()
+
+        def process_client(msg):
+            """Function that process the request of the client and
+            opens thee new page"""
+
+            # Processing the request message
             msg = self.requestline.split()
-            # Position in the request line that correspond to the echo message
+            # Position in the request line that correspond to the sequence
             position = msg[1]
             # Way to have the message of the client
             msg_cl = position.find("msg=")
             msg_end = position.find("&")
+            # Way to know the base to perform the operations
+            base_start = position.find("base")
+            base_end = position.find("&operation")
+            # Way to know the operation
+            oper_start = position.find("operation")
+
             # ---- MESSAGE OF THE CLIENT ----
             seq_msg = position[msg_cl + 4: msg_end]
             seq_msg = seq_msg.upper()
 
-            invalid_char = False
-            for letter in seq_msg:
-                letter = letter.upper()
-                if letter != 'A' and letter != 'C' and letter != 'G' and letter != 'T':
-                    invalid_char = True
+            # ---- BASE ----
+            base = position[base_start + 5: base_end]
 
-            if invalid_char:
-                process_error("error.html")
+            # ---- OPERATION ----
+            operation = position[oper_start + 10:]
 
-            else:
-                if "chk" in self.path:
-                    seq_dna = Seq(seq_msg)
-                    len_seq = seq_dna.len()
-                    seq_len = str(len_seq)
+            # Using the Class Seq
+            seq_dna = Seq(seq_msg)
 
-                    contents = """
-                        <!DOCTYPE html>
-                        <html lang="en" dir="ltr">
-                          <head>
-                            <meta charset="utf-8">
-                            <title>DNA SEQUENCE</title>
-                          </head>
-                          <body style="background-color: lightblue;">
-                            <h1>DNA SEQUENCE</h1>
-                             <br>""" + seq_msg + """ <br><br>
-                             <br>""" + seq_len + """ <br><br>
-                            <a href="10.0.2.15:8000/">Link to main server</a>
-                          </body>
-                        </html>
-                        """
+            # ---- CALLING THE FUNCTIONS ----
+            valid_seq(seq_msg)
+            chk_len(seq_dna)
+            treat(seq_dna, operation, base)
 
-                else:
-                    contents = """
-                        <!DOCTYPE html>
-                        <html lang="en" dir="ltr">
-                          <head>
-                            <meta charset="utf-8">
-                            <title>DNA SEQUENCE</title>
-                          </head>
-                          <body style="background-color: lightblue;">
-                            <h1>DNA SEQUENCE</h1>
-                             <br>""" + seq_msg + """ <br><br>
-                            <a href="10.0.2.15:8000/">Link to main server</a>
-                          </body>
-                        </html>
-                        """
+            # Naming the functions and converting them to strings in order to using
+            # them in the HTML
+
+            length = str(chk_len(seq_dna))
+            operations = str(treat(seq_dna, operation, base))
+
+            # --- VALID SEQUENCE INTRODUCED ---
+
+            if valid_seq(seq_msg):
+                # Creating the HTML
+                contents = """
+                    <!DOCTYPE html>
+                    <html lang="en" dir="ltr">
+                      <head>
+                        <meta charset="utf-8">
+                        <title>DNA SEQUENCE</title>
+                      </head>
+                      <body style="background-color: lightblue;">
+                        <h1>DNA SEQUENCE</h1>
+                         <br>""" + seq_msg + """ <br><br>
+                         <br>""" + length + """ <br><br>
+                         <br>""" + operations + """ <br><br>
+                        <a href="10.0.2.15:8000/">Link to main server</a>
+                      </body>
+                    </html>
+                    """
 
                 # Everything is OK
                 status_line = "HTTP/1.1 200 OK\r\n"
@@ -136,8 +173,16 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 # Build the message by joining together all the parts
                 response_msg = str.encode(status_line + header + "\r\n" + contents)
 
-                # Send the echo message
+                # Send the message
                 self.wfile.write(response_msg)
+
+        # Open the main page
+        if "/ HTTP/1.1" in self.requestline:
+            process_info("index.html")
+
+        # Open the page with the message according the request
+        elif "/seq" in self.path:
+            process_client(msg=self.requestline)
 
         # Error page
         else:
