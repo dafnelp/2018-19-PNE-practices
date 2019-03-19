@@ -1,0 +1,10 @@
+{
+    "Firstname": ["Troll", "Sax", "Rick"],
+    "Lastname": ["Face", "Guy", "Roll"],
+    "Age": ["20", "10", "35"],
+    "phoneNumber": [
+        {"number": ["1111-1111", "2222344", "4567888"], "type":  ["home", "work", "school"]},
+        {"number":  "2222-2222", "type":  "mobile"}
+
+        ]
+}
