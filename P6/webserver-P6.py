@@ -5,7 +5,7 @@ import termcolor
 from Seq import Seq
 
 # Define the port
-PORT = 8000
+PORT = 8001
 
 
 # Class with our handler
@@ -95,11 +95,46 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             Class Seq, operation --- count or percentage, base --- type of base of DNA"""
 
             if operation == "count":
-                counter_bases = "Number of bases: {}".format(seq_dna.count_bases())
-                return counter_bases
+                if base == "A":
+                    counter_bases_A = "Number of bases {}".format(seq_dna.count_bases("A"))
+
+                    return counter_bases_A
+
+                elif base == "C":
+                    counter_bases_C = "Number of bases {}".format(seq_dna.count_bases("C"))
+
+                    return counter_bases_C
+
+                elif base == "T":
+                    counter_bases_T = "Number of bases {}".format(seq_dna.count_bases("T"))
+
+                    return counter_bases_T
+
+                elif base == "G":
+                    counter_bases_G = "Number of bases {}".format(seq_dna.count_bases("G"))
+
+                    return counter_bases_G
 
             elif operation == "perc":
-                return seq_dna.perc()
+                if base == "A":
+                    perc_A = "Percentage of {}".format(seq_dna.perc("A"))
+
+                    return perc_A
+
+                elif base == "C":
+                    perc_C = "Percentage of {}".format(seq_dna.perc("C"))
+
+                    return perc_C
+
+                elif base == "T":
+                    perc_T = "Percentage of {}".format(seq_dna.perc("T"))
+
+                    return perc_T
+
+                elif base == "G":
+                    perc_G = "Percentage of {}".format(seq_dna.perc("G"))
+
+                    return perc_G
 
         def process_client(msg):
             """Function that process the request of the client and
