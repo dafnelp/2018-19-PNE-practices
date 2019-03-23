@@ -1,10 +1,23 @@
 {
     "Firstname": ["Troll", "Sax", "Rick"],
-    "Lastname": ["Face", "Guy", "Roll"],
-    "Age": ["20", "10", "35"],
-    "phoneNumber": [
-        {"number": ["1111-1111", "2222344", "4567888"], "type":  ["home", "work", "school"]},
-        {"number":  "2222-2222", "type":  "mobile"}
 
+    "Lastname": ["Face", "Guy", "Roll"],
+
+    "Age": ["20", "10", "35"],
+
+    "phoneNumber": [
+        [
+        {"number":  "111", "type": "office"}
+
+        ],
+        [
+        {"number":  "112", "type": "office"},
+        {"number":  "1334", "type": "home"}
+        ],
+        [
+        {"number":  "88987", "type": "office"},
+        {"number":  "176", "type": "home"}
         ]
+        ]
+
 }
