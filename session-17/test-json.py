@@ -1,27 +1,34 @@
 import json
 import termcolor
 
-f = open("person.json", 'r')
+# -- Open the json file
+f = open("person1.json", 'r')
 
+# Read the data from the file
+# Now person is a dictionary with all the information
 person = json.load(f)
 
+# Print the information of the object
 print()
+termcolor.cprint("Name: ", 'green', end="")
+print(person['Firstname'], person['Lastname'])
+termcolor.cprint("Age: ", 'green', end="")
+print(person['age'])
 
-for i, per in enumerate(person["Firstname"]):
-    termcolor.cprint("Name {}: ".format(i), 'yellow', end='')
-    print(per)
-print()
-for i, age in enumerate(person["Age"]):
-    termcolor.cprint("Age {}: ".format(i), 'blue', end='')
-    print(age)
-print()
-for i, per in enumerate(person["Lastname"]):
-    termcolor.cprint("Last name {}: ".format(i), 'green', end='')
-    print(per)
-print()
-for i, num in enumerate(person["phoneNumber"]):
-    termcolor.cprint(" Phone {}".format(i), end='')
-    termcolor.cprint("   Type:", 'red', end='')
+# Get the phoneNumber list
+phoneNumbers = person['phoneNumber']
+
+# Print the number of elements int the list
+termcolor.cprint("Phone numbers: ", 'green', end='')
+print(len(phoneNumbers))
+
+# Print all the numbers
+for i, num in enumerate(phoneNumbers):
+    termcolor.cprint("  Phone {}:".format(i), 'blue')
+
+    # The element num contains 2 fields: number and type
+    termcolor.cprint("    Type: ", 'red', end='')
     print(num['type'])
-    termcolor.cprint("   Number:", 'red', end='')
-    print(num["number"])
+    termcolor.cprint("    Number: ", 'red', end='')
+    print(num['number'])
+
