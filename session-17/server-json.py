@@ -3,11 +3,11 @@ import socketserver
 import termcolor
 
 # Define the Server's port
-PORT = 8001
+PORT = 8000
 
 
 # Class with our Handler. It is a called derived from BaseHTTPRequestHandler
-# It means that our class inheritates all his methods and properties
+# It means that our class inherits  all his methods and properties
 class TestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
@@ -30,7 +30,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             content_type = 'text/html'
 
         elif resource == "/listusers":
-            f = open("person.json", 'r')
+            f = open("person1.json", 'r')
             code = 200
             # Read the file
             contents = f.read()
@@ -75,7 +75,7 @@ with socketserver.TCPServer(("", PORT), Handler) as httpd:
         httpd.serve_forever()
     except KeyboardInterrupt:
         print("")
-        print("Stoped by the user")
+        print("Stopped by the user")
         httpd.server_close()
 
 print("")
