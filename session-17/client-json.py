@@ -42,7 +42,7 @@ termcolor.cprint("Name: ", 'green', end="")
 print(person['Firstname'], person['Lastname'])
 
 termcolor.cprint("Age: ", 'green', end="")
-print(person['Age'])
+print(person['age'])
 
 # Get the phoneNumber list
 phoneNumbers = person['phoneNumber']
