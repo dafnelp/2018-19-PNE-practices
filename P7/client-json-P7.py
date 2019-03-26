@@ -47,7 +47,16 @@ bases_t = FRAT1_gen.count_bases("T")
 termcolor.cprint("The number of T bases are: ", 'yellow')
 print(bases_t)
 
+# MOST POPULAR BASE
 
+if FRAT1_gen.perc("A") > FRAT1_gen.perc("C") and FRAT1_gen.perc("A") > FRAT1_gen.perc("T") and FRAT1_gen.perc("A") > FRAT1_gen.perc("G"):
+    print("The most popular base is A and their percentage is: {}".format(FRAT1_gen.perc("A")))
+elif FRAT1_gen.perc("C") > FRAT1_gen.perc("A") and FRAT1_gen.perc("C") > FRAT1_gen.perc("T") and FRAT1_gen.perc("C") > FRAT1_gen.perc("G"):
+    print("The most popular base is C and their percentage is: {}".format(FRAT1_gen.perc("C")))
+elif FRAT1_gen.perc("T") > FRAT1_gen.perc("G") and FRAT1_gen.perc("T") > FRAT1_gen.perc("C") and FRAT1_gen.perc("T") > FRAT1_gen.perc("A"):
+    print("The most popular base is T and their percentage is: {}".format(FRAT1_gen.perc("T")))
+else:
+    print("The most popular base is G and their percentage is: {}".format(FRAT1_gen.perc("G")))
 
 # -- PERCENTAGE OF ALL BASES --
 bases = ["A", "C", "T", "G"]
