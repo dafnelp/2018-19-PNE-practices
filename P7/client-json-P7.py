@@ -4,8 +4,9 @@ import json
 
 from Seq import Seq
 
+HOSTNAME = 'rest.ensembl.org'
 # Connect with the complete API Rest from ensembl
-conn = http.client.HTTPConnection('rest.ensembl.org')
+conn = http.client.HTTPConnection(HOSTNAME)
 
 # -- Send the request message, using the GET method. We are
 # -- requesting a sequence (/sequence/id), an Ensembl stable ID
