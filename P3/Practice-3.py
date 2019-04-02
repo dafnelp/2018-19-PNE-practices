@@ -2,56 +2,96 @@ import socket
 
 from Seq import Seq
 
-PORT = 8082
-IP = "10.0.2.15"
+PORT = 8080
+IP = "127.0.0.1"
 MAX_OPEN_REQUEST = 5
+
+
+def valid_seq(seq_msg):
+    """Function to know if the characters introduced by the
+    client are a sequence of DNA.
+    Parameters: seq_msg that corresponds to the message introduced
+    by the client"""
+
+    for letter in seq_msg:
+        # Way that allow to recognize upper and lower introduced characters
+        letter = letter.upper()
+        if letter != 'A' and letter != 'C' and letter != 'G' and letter != 'T':
+            # Open the error HTML file
+            return False
+    return True
 
 
 def process_client(cs):
     # Reading the message from the client
     msg = cs.recv(2048).decode("utf-8")
-    first_msg = msg.find("n")
+    # Divide the message by parts
+    msgs = msg.split("\n")
     # Where we store the sequences introduced by the client
-    seq = msg[0:first_msg - 1]
+    seq = msgs[0]
     seq = seq.upper()
-    # Where the commands introduced by the client are stored
-    command = msg[first_msg + 1:]
-    command = command.lower()
     # Convert the string into an object
     seq_dna = Seq(seq)
+    # Where we store the message to send to the client
+    answer = ''
 
-    if msg == " ":
+    # The client wants to know if the server is working
+    if msg == "\n":
         cs.send(str.encode("ALIVE"))
+
+    # Not requesting if the server is working
     else:
-        invalid_char = False
-        for letter in seq:
-            letter = letter.upper()
-            if letter != 'A' and letter != 'C' and letter != 'G' and letter != 'T':
-                invalid_char = True
+        # The sequence introduced by the client is correct
+        if valid_seq(seq):
+            answer = "OK\n"
+            # Rest of the message of the client
+            for i in range(1, len(msgs) - 1):
+                operation = ""
 
-        if invalid_char:
-            cs.send(str.encode("ERROR"))
-            cs.close()
+                # Operations to perform
+                if "len" in msgs[i]:
+                    operation = seq_dna.len()
+
+                if "complement" in msgs[i]:
+                    operation = seq_dna.complement()
+
+                if "reverse" in msgs[i]:
+                    operation = seq_dna.reverse()
+
+                if "countA" in msgs[i]:
+                    operation = seq_dna.count_bases("A")
+
+                if "countT" in msgs[i]:
+                    operation = seq_dna.count_bases("T")
+
+                if "countC" in msgs[i]:
+                    operation = seq_dna.count_bases("C")
+
+                if "countG" in msgs[i]:
+                    operation = seq_dna.count_bases("G")
+
+                if "percA" in msgs[i]:
+                    operation = seq_dna.perc("A")
+
+                if "percT" in msgs[i]:
+                    operation = seq_dna.perc("T")
+
+                if "percC" in msgs[i]:
+                    operation = seq_dna.perc("A")
+
+                if "percG" in msgs[i]:
+                    operation = seq_dna.perc("A")
+
+                answer = answer + str(operation) + "\n"
+                print(answer)
+
         else:
-            cs.send(str.encode('OK'))
+            answer = "ERROR"
 
-            if "len" in command:
-                len_seq = seq_dna.len()
-                print(len_seq)
-            if "complement" in command:
-                comp_seq = seq_dna.complement()
-                print(comp_seq)
-            if "reverse" in command:
-                rev_seq = seq_dna.reverse()
-                print(rev_seq)
-            if "counta" in command or "countt" in command or "countc" in command or "countg" in command:
-                count_bases = seq_dna.count()
-                print(count_bases)
-            if "perca" in command or "perct" in command or "pecc"in command or "percg" in command:
-                perc_bases = seq_dna.perc()
-                print(perc_bases)
+    cs.send(str.encode(answer))
 
-            cs.close()
+    cs.close()
+
 
 # Create a socket for connecting to the clients
 
