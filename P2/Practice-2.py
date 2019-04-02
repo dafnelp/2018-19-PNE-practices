@@ -1,31 +1,46 @@
 import socket
 
-from Seq import Seq
+# Configure the Server's IP and PORT
+PORT = 8080
+IP = "127.0.0.1"
+MAX_OPEN_REQUESTS = 5
 
-# Connect to the server using a while loop for asking for different sequences
-PORT = 8082
-IP = "10.0.2.15"
+# Counting the number of connections
+number_con = 0
 
-s_msg = True
+# create an INET, STREAMing socket
+serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+try:
+    serversocket.bind((IP, PORT))
+    # become a server socket
+    # MAX_OPEN_REQUESTS connect requests before refusing outside connections
+    serversocket.listen(MAX_OPEN_REQUESTS)
 
-while True:
-    str_msg = input("Please, enter a sequence of amino acids: ")
-    str_msg = Seq(str_msg)
+    while True:
+        # accept connections from outside
+        print("Waiting for connections at {}, {} ".format(IP, PORT))
+        (clientsocket, address) = serversocket.accept()
 
-    seq_comp = str_msg.complement()
-    seq_comp = Seq(seq_comp)
-    seq_rev = seq_comp.reverse()
+        # Another connection!
+        number_con += 1
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Print the connection number
+        print("CONNECTION: {}. From the IP: {}".format(number_con, address))
 
-    s.connect((IP, PORT))
+        # Read the message from the client, if any
+        msg = clientsocket.recv(2048).decode("utf-8")
+        print("Message from client: {}".format(msg))
 
-    s.send(str.encode(seq_rev))
+        # Send the message
+        message = "Hello from Dafne's server"
+        send_bytes = str.encode(message)
+        # We must write bytes, not a string
+        clientsocket.send(send_bytes)
+        clientsocket.close()
 
-    msg = s.recv(2048).decode("utf-8")
-    print("MESSAGE FROM THE SERVER:")
-    print(msg)
+except socket.error:
+    print("Problems using port {}. Do you have permission?".format(PORT))
 
-    s.close()
-
-    print("The end")
+except KeyboardInterrupt:
+    print("Server stopped by the user")
+    serversocket.close()
