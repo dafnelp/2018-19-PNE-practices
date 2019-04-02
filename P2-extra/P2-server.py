@@ -2,7 +2,7 @@ import socket
 
 # Configure the Server's IP and PORT
 
-PORT = 8083
+PORT = 8082
 IP = "10.0.2.15"
 MAX_OPEN_REQUESTS = 5
 
@@ -56,8 +56,7 @@ try:
         print("Complementary of the sequence introduced by the client: {}".format(msg_seq))
 
         # Send the message
-        message = "Complementary sequence created"
-        send_bytes = str.encode(message)
+        send_bytes = str.encode(msg_seq)
         # We must write bytes, not a string
         clientsocket.send(send_bytes)
         clientsocket.close()
