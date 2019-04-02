@@ -83,7 +83,6 @@ def process_client(cs):
                     operation = seq_dna.perc("A")
 
                 answer = answer + str(operation) + "\n"
-                print(answer)
 
         else:
             answer = "ERROR"
